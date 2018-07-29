@@ -358,8 +358,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
+        let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
-        runCode(definitionText: definitionText, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
+        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
                 out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
 
         resetTestUIs(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
@@ -396,10 +397,12 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
 
-    func runCode(definitionText: String, in1: String, in2: String = "", in3: String = "",
+    func runCode(definitionText: String, interpreterSemantics: String, in1: String, in2: String = "", in3: String = "",
                in4: String = "", in5: String = "", in6: String = "",
                out1: String, out2: String = "", out3: String = "", out4: String = "",
                out5: String = "", out6: String = "") {
+
+
         // see how many operations are currently in the queue
         print("operation count: \(processingQueue.operationCount)")
 
@@ -438,17 +441,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let new_query_file_actual_test6 = "barliman-new-query-actual-test6.scm"
         let new_query_file_actual_alltests = "barliman-new-query-actual-alltests.scm"
 
-
         let mk_vicare_path_string = mk_vicare_path! as String
         let mk_path_string = mk_path! as String
 
         let load_mk_vicare_string: String = "(load \"\(mk_vicare_path_string)\")"
         let load_mk_string: String = "(load \"\(mk_path_string)\")"
 
-        let interp_string: String = semanticsWindowController!.getInterpreterCode()
 
-
-        let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
+        let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interpreterSemantics,
                 definitionText: definitionText,
                 mk_vicare_path_string: mk_vicare_path_string,
                 mk_path_string: mk_path_string)
@@ -608,7 +608,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         var pathQuerySimpleForMondoSchemeFile: URL!
-        var pathMondoScheme: URL!
         var pathNewSimple: URL!
 
         var pathNewTest1: URL!
@@ -695,14 +694,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let schemeScriptPathStringNewTest5 = pathNewTest5.path
         let schemeScriptPathStringNewTest6 = pathNewTest6.path
         let schemeScriptPathStringNewAlltests = pathNewAlltests.path
-
-        let schemeScriptPathStringNewActualTest1 = pathNewActualTest1.path
-        let schemeScriptPathStringNewActualTest2 = pathNewActualTest2.path
-        let schemeScriptPathStringNewActualTest3 = pathNewActualTest3.path
-        let schemeScriptPathStringNewActualTest4 = pathNewActualTest4.path
-        let schemeScriptPathStringNewActualTest5 = pathNewActualTest5.path
-        let schemeScriptPathStringNewActualTest6 = pathNewActualTest6.path
-        let schemeScriptPathStringNewActualAlltests = pathNewActualAlltests.path
 
 
         // create the operations that will be placed in the operation queue
