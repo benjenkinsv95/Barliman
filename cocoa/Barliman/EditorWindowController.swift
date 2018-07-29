@@ -282,28 +282,30 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
     func runCodeFromEditPane() {
         // Extract data from UI
-        let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
-        let in1 = (processTest1 ? test1InputField.stringValue : "")
-        let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
-        let test1 = SchemeTest(input: in1, output: out1, id: 1)
+        let test = SchemeTest(inputField: test1InputField,
+                expectedOutputField: test1ExpectedOutputField,
+                statusLabel: test1StatusLabel,
+                spinner: test1Spinner,
+                id: 1)
+        let tests = [test]
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
-        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, test: test1)
+        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, test: test)
 
-        resetTestUIs(in1: in1, out1: out1)
+        resetTestUIs(tests: tests)
     }
 
-    func resetTestUIs(in1: String, out1: String) {
-        func resetTestUI(_ statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
-            statusLabel.stringValue = ""
-            inputField.textColor = EditorWindowController.defaultColor()
-            outputField.textColor = EditorWindowController.defaultColor()
-        }
-
-        if !shouldProcessTest(input: in1, output: out1) {
-            resetTestUI(test1StatusLabel, inputField: test1InputField, outputField: test1ExpectedOutputField)
+    func resetTestUIs(tests: [SchemeTest]) {
+        for test in tests {
+            if !test.shouldProcess {
+                if let view = test.view {
+                    view.statusLabel.stringValue = ""
+                    view.inputField.textColor = EditorWindowController.defaultColor()
+                    view.expectedOutputField.textColor = EditorWindowController.defaultColor()
+                }
+            }
         }
     }
 
