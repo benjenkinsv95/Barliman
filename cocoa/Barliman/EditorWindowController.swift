@@ -309,6 +309,53 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
 
+    func getTestQueryString(new_test_query_template_string: String, test: SchemeTest) -> String {
+        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
+            let fullSimpleQueryForMondoSchemeFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")
+            let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path
+
+            let fullNewQueryActualTestFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-\(test.name).scm")
+            let localNewQueryActualTestFilePath = fullNewQueryActualTestFilePath.path
+
+
+            let loadFileString =
+                    "(define simple-query-for-mondo-file-path \"\(localSimpleQueryForMondoSchemeFilePath)\")"
+
+            func makeNewTestNQueryString(_ id: Int, actualQueryFilePath: String) -> String {
+                return loadFileString + "\n\n" +
+                        "(define actual-query-file-path \"\(actualQueryFilePath)\")" + "\n\n" +
+                        "(define (test-query-fn) (query-val-\(test.name)))" + "\n\n\n" +
+                        new_test_query_template_string
+            }
+
+            return makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTestFilePath)
+        } else {
+            preconditionFailure("Couldn't find document directory.")
+        }
+    }
+
+    func getTestQueryFilePaths(test: SchemeTest) -> (testPath: URL, actualTestPath: URL){
+        let new_query_file_test = "barliman-new-query-\(test.name).scm"
+        let new_query_file_actual_test = "barliman-new-query-actual-\(test.name).scm"
+
+        if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
+            return (testPath: URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test),
+                    actualTestPath: URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test))
+        }
+
+        preconditionFailure("Couldn't load files from directory")
+    }
+
+    func writeTestQueryFiles(testQuery: String, testPath: URL, actualTestQuery: String, actualTestPath: URL) {
+        do {
+            try testQuery.write(to: testPath, atomically: false, encoding: String.Encoding.utf8)
+            try actualTestQuery.write(to: actualTestPath, atomically: false, encoding: String.Encoding.utf8)
+        } catch {
+            // this error handling could be better!  :)
+            print("couldn't write to query files")
+        }
+    }
+
     func runCode(definitionText: String,
                  interpreterSemantics: String,
                  test: SchemeTest) {
@@ -327,11 +374,11 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         // files that load query code
         let new_query_file_simple = "barliman-new-query-simple.scm"
-        let new_query_file_test1 = "barliman-new-query-test1.scm"
+
         let new_query_file_alltests = "barliman-new-query-alltests.scm"
 
         // files containing the actual query code
-        let new_query_file_actual_test1 = "barliman-new-query-actual-test1.scm"
+
         let new_query_file_actual_alltests = "barliman-new-query-actual-alltests.scm"
 
         let mk_vicare_path_string = mk_vicare_path! as String
@@ -347,11 +394,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                 mk_path_string: mk_path_string)
 
 
-        let newTest1ActualQueryString: String = makeQueryString(definitionText,
-                body: test.input,
-                expectedOut: test.output,
-                simple: false,
-                name: "-\(test.name)")
+
 
 
         let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText,
@@ -395,17 +438,15 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let newSimpleQueryString: String
-        let newTest1QueryString: String
         let newAlltestsQueryString: String
+
+
 
 
         if let dir = NSSearchPathForDirectoriesInDomains(.documentDirectory, .allDomainsMask, true).first {
 
             let fullSimpleQueryForMondoSchemeFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-query-simple-for-mondo-scheme-file.scm")
             let localSimpleQueryForMondoSchemeFilePath = fullSimpleQueryForMondoSchemeFilePath.path
-
-            let fullNewQueryActualTest1FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test1.scm")
-            let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path
 
             let fullNewQueryActualAlltestsFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-alltests.scm")
             let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
@@ -420,33 +461,17 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                     loadFileString + "\n\n" +
                             "(define actual-query-file-path \"\(localNewQueryActualAlltestsFilePath)\")" + "\n\n" +
                             new_alltests_query_template_string
-
-
-            func makeNewTestNQueryString(_ n: Int, actualQueryFilePath: String) -> String {
-                return loadFileString + "\n\n" +
-                        "(define actual-query-file-path \"\(actualQueryFilePath)\")" + "\n\n" +
-                        "(define (test-query-fn) (query-val-test\(n)))" + "\n\n\n" +
-                        new_test_query_template_string
-            }
-
-            newTest1QueryString = makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTest1FilePath)
         } else {
-            print("!!!!!  LOAD_ERROR -- can't find Document directory\n")
-
-            newSimpleQueryString = ""
-            newTest1QueryString = ""
-            newAlltestsQueryString = ""
+            preconditionFailure("Can't find document directory.")
         }
-
 
         var pathQuerySimpleForMondoSchemeFile: URL!
         var pathNewSimple: URL!
 
-        var pathNewTest1: URL!
         var pathNewAlltests: URL!
-
-        var pathNewActualTest1: URL!
         var pathNewActualAlltests: URL!
+
+
 
 
         // write the temporary file containing the query to the user's Document directory.  This seems a bit naughty.  Where is the right place to put this?  In ~/.barliman, perhaps?
@@ -456,25 +481,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
             pathNewSimple = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_simple)
-
-            pathNewTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test1)
             pathNewAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_alltests)
-
-            pathNewActualTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test1)
             pathNewActualAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_alltests)
 
             // write the query files
             do {
-
                 try querySimpleForMondoSchemeContents.write(to: pathQuerySimpleForMondoSchemeFile, atomically: false, encoding: String.Encoding.utf8)
-
-
                 try newSimpleQueryString.write(to: pathNewSimple, atomically: false, encoding: String.Encoding.utf8)
-
-                try newTest1QueryString.write(to: pathNewTest1, atomically: false, encoding: String.Encoding.utf8)
                 try newAlltestsQueryString.write(to: pathNewAlltests, atomically: false, encoding: String.Encoding.utf8)
-
-                try newTest1ActualQueryString.write(to: pathNewActualTest1, atomically: false, encoding: String.Encoding.utf8)
                 try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
             } catch {
                 // this error handling could be better!  :)
@@ -483,17 +497,16 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
 
 
+
         // paths to the Schemes file containing the miniKanren query
         let schemeScriptPathStringNewSimple = pathNewSimple.path
-        let schemeScriptPathStringNewTest1 = pathNewTest1.path
         let schemeScriptPathStringNewAlltests = pathNewAlltests.path
 
 
+
+
         // create the operations that will be placed in the operation queue
-
-
         let runSchemeOpSimple = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewSimple, taskType: "simple")
-        let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest1, taskType: "test1")
         let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewAlltests, taskType: "allTests")
 
 
@@ -512,9 +525,26 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         runSchemeOperationQueue.addOperation(runSchemeOpSimple)
 
-        if shouldProcessTest(input: test.input, output: test.output) {
-            print("queuing test1")
+
+
+        let testPaths = getTestQueryFilePaths(test: test)
+
+        let newTest1QueryString = getTestQueryString(new_test_query_template_string: new_test_query_template_string,
+                test: test)
+        let newTest1ActualQueryString: String = makeQueryString(definitionText,
+                body: test.input,
+                expectedOut: test.output,
+                simple: false,
+                name: "-\(test.name)")
+
+        writeTestQueryFiles(testQuery: newTest1QueryString, testPath: testPaths.testPath, actualTestQuery: newTest1ActualQueryString, actualTestPath: testPaths.actualTestPath)
+        let miniKanrenQueryFilePath = testPaths.testPath.path
+        let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: miniKanrenQueryFilePath, taskType: "\(test.name)", test: test)
+
+        if test.shouldProcess {
+            print("queuing \(test.name)")
             runSchemeOperationQueue.addOperation(runSchemeOpTest1)
         }
+
     }
 }
