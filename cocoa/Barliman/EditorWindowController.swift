@@ -20,11 +20,17 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
     @IBOutlet weak var bestGuessStatusLabel: NSTextField!
 
+    // TODO: Wrap 4 properties in their own views
     @IBOutlet weak var test1Spinner: NSProgressIndicator!
     @IBOutlet weak var test1InputField: NSTextField!
     @IBOutlet weak var test1ExpectedOutputField: NSTextField!
     @IBOutlet weak var test1StatusLabel: NSTextField!
-
+    
+    @IBOutlet weak var test2ExpectedOutputField: NSTextField!
+    @IBOutlet weak var test2InputField: NSTextField!
+    @IBOutlet weak var test2StatusLabel: NSTextField!
+    @IBOutlet weak var test2Spinner: NSProgressIndicator!
+    
     var runCodeFromEditPaneTimer: Timer?
 
     var semanticsWindowController: SemanticsWindowController?
@@ -151,9 +157,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         return full_string
     }
 
-    private func makeAllTestsQueryString(definitionText: String, testInputs: [String], testOutputs: [String]) -> String {
-        let allTestInputs = testInputs.joined(separator: " ")
-        let allTestOutputs = testOutputs.joined(separator: " ")
+    private func makeAllTestsQueryString(definitionText: String, tests: [SchemeTest]) -> String {
+        let allTestInputs = tests.map({$0.input}).joined(separator: " ")
+        let allTestOutputs = tests.map({$0.output}).joined(separator: " ")
 
 
         // get the path to the application's bundle, so we can load the query string files
@@ -282,17 +288,22 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
     func runCodeFromEditPane() {
         // Extract data from UI
-        let test = SchemeTest(inputField: test1InputField,
+        let test1 = SchemeTest(inputField: test1InputField,
                 expectedOutputField: test1ExpectedOutputField,
                 statusLabel: test1StatusLabel,
                 spinner: test1Spinner,
                 id: 1)
-        let tests = [test]
+        let test2 = SchemeTest(inputField: test2InputField,
+                               expectedOutputField: test2ExpectedOutputField,
+                               statusLabel: test2StatusLabel,
+                               spinner: test2Spinner,
+                               id: 2)
+        let tests = [test1, test2]
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
-        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, test: test)
+        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, tests: tests)
 
         resetTestUIs(tests: tests)
     }
@@ -358,7 +369,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
     func runCode(definitionText: String,
                  interpreterSemantics: String,
-                 test: SchemeTest) {
+                 tests: [SchemeTest]) {
         // see how many operations are currently in the queue
         print("operation count: \(runSchemeOperationQueue.operationCount)")
         runSchemeOperationQueue.cancelAllOperations()
@@ -398,7 +409,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText,
-                testInputs: [test.input], testOutputs: [test.output])
+                tests: tests)
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
@@ -526,12 +537,22 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         runSchemeOperationQueue.addOperation(runSchemeOpSimple)
 
 
+        for test in tests {
+            if test.shouldProcess {
+                let runSchemeTestOperation = buildRunSchemeOperationFor(test: test,
+                        withQueryTemplate: new_test_query_template_string, andDefinitionText: definitionText)
+            
+                print("queuing \(test.name)")
+                runSchemeOperationQueue.addOperation(runSchemeTestOperation)
+            }
+        }
+    }
 
+    func buildRunSchemeOperationFor(test: SchemeTest, withQueryTemplate: String, andDefinitionText: String) -> RunSchemeOperation {
         let testPaths = getTestQueryFilePaths(test: test)
-
-        let newTest1QueryString = getTestQueryString(new_test_query_template_string: new_test_query_template_string,
+        let newTest1QueryString = getTestQueryString(new_test_query_template_string: withQueryTemplate,
                 test: test)
-        let newTest1ActualQueryString: String = makeQueryString(definitionText,
+        let newTest1ActualQueryString: String = makeQueryString(andDefinitionText,
                 body: test.input,
                 expectedOut: test.output,
                 simple: false,
@@ -540,11 +561,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         writeTestQueryFiles(testQuery: newTest1QueryString, testPath: testPaths.testPath, actualTestQuery: newTest1ActualQueryString, actualTestPath: testPaths.actualTestPath)
         let miniKanrenQueryFilePath = testPaths.testPath.path
         let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: miniKanrenQueryFilePath, taskType: "\(test.name)", test: test)
-
-        if test.shouldProcess {
-            print("queuing \(test.name)")
-            runSchemeOperationQueue.addOperation(runSchemeOpTest1)
-        }
-
+        return runSchemeOpTest1
     }
 }

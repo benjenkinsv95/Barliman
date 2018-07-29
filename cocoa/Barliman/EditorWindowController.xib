@@ -20,6 +20,10 @@
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
                 <outlet property="test1Spinner" destination="XLM-qT-jee" id="TqP-A1-Vq7"/>
                 <outlet property="test1StatusLabel" destination="YAo-sB-usO" id="hhE-Zp-p36"/>
+                <outlet property="test2ExpectedOutputField" destination="gdx-YV-50A" id="tF0-8b-1cE"/>
+                <outlet property="test2InputField" destination="Zk9-VL-qgY" id="hgQ-X1-HCI"/>
+                <outlet property="test2Spinner" destination="Q0B-ug-Hgn" id="0yJ-sM-jx3"/>
+                <outlet property="test2StatusLabel" destination="QWo-qp-Aen" id="0ZF-15-eV1"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="ERh-Rc-rRE"/>
             </connections>
         </customObject>
@@ -84,6 +88,45 @@
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
                         </textFieldCell>
                     </textField>
+                    <box misplaced="YES" borderType="line" title="Test 2" id="Ff9-hB-A3N" userLabel="Test 1">
+                        <rect key="frame" x="498" y="367" width="528" height="79"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMinY="YES"/>
+                        <view key="contentView" id="eRw-ah-U5Z">
+                            <rect key="frame" x="1" y="1" width="526" height="60"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                            <subviews>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="gdx-YV-50A" userLabel="Test 1 Expected Output">
+                                    <rect key="frame" x="4" y="0.0" width="522" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="mPm-SL-7iO">
+                                        <font key="font" size="14" name="Monaco"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="Sah-90-d4J"/>
+                                    </connections>
+                                </textField>
+                                <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Zk9-VL-qgY" userLabel="Test 1 Input">
+                                    <rect key="frame" x="4" y="33" width="522" height="26"/>
+                                    <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="kEi-It-mMd">
+                                        <font key="font" size="14" name="Monaco"/>
+                                        <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
+                                        <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
+                                    </textFieldCell>
+                                    <connections>
+                                        <outlet property="delegate" destination="-2" id="djb-h6-j8R"/>
+                                    </connections>
+                                </textField>
+                            </subviews>
+                        </view>
+                        <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
+                    </box>
+                    <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="Q0B-ug-Hgn" userLabel="Test1 Spinner">
+                        <rect key="frame" x="1007" y="430" width="16" height="16"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                    </progressIndicator>
                     <splitView misplaced="YES" arrangesAllSubviews="NO" dividerStyle="paneSplitter" id="EBS-n1-Pbf">
                         <rect key="frame" x="0.0" y="0.0" width="493" height="545"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
@@ -958,6 +1001,15 @@
                             <real value="250"/>
                         </holdingPriorities>
                     </splitView>
+                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="QWo-qp-Aen" userLabel="Test 1 Status Label">
+                        <rect key="frame" x="680" y="429" width="321" height="17"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
+                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="RJn-sL-98c">
+                            <font key="font" metaFont="system"/>
+                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                        </textFieldCell>
+                    </textField>
                 </subviews>
             </view>
             <connections>
