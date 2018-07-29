@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="11542" systemVersion="16B2555" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
+<document type="com.apple.InterfaceBuilder3.Cocoa.XIB" version="3.0" toolsVersion="14113" targetRuntime="MacOSX.Cocoa" propertyAccessControl="none" customObjectInstantitationMethod="direct">
     <dependencies>
         <deployment identifier="macosx"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="11542"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.CocoaPlugin" version="14113"/>
         <capability name="box content view" minToolsVersion="7.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -66,7 +66,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Zi0-kV-0Zv" userLabel="Test 1 Expected Output">
                                     <rect key="frame" x="4" y="0.0" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="bMe-If-e1j">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="`(a b)" drawsBackground="YES" id="bMe-If-e1j">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -78,7 +78,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="dfp-gE-e7y" userLabel="Test 1 Input">
                                     <rect key="frame" x="4" y="33" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="NPE-z4-TYw">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="(append '(a) '(b))" drawsBackground="YES" id="NPE-z4-TYw">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -349,28 +349,28 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES"/>
                         <subviews>
                             <customView id="jN3-S4-UrC">
-                                <rect key="frame" x="0.0" y="0.0" width="493" height="260.5"/>
+                                <rect key="frame" x="0.0" y="0.0" width="493" height="261"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <box borderType="line" title="Definitions" id="wt0-sc-FFV">
-                                        <rect key="frame" x="4" y="1.5" width="485" height="259"/>
+                                        <rect key="frame" x="4" y="1" width="485" height="260"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES" heightSizable="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" id="Ae3-aa-c0f">
-                                            <rect key="frame" x="1" y="1" width="483" height="240"/>
+                                            <rect key="frame" x="1" y="1" width="483" height="241"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="OJ5-W3-rMK">
-                                                    <rect key="frame" x="0.0" y="0.0" width="483" height="240"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="483" height="241"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="alQ-A2-iTh">
-                                                        <rect key="frame" x="1" y="1" width="481" height="238"/>
+                                                        <rect key="frame" x="1" y="1" width="466" height="239"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textView importsGraphics="NO" richText="NO" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" id="4FU-au-vlw" customClass="SchemeEditorTextView" customModule="Barliman" customModuleProvider="target">
-                                                                <rect key="frame" x="0.0" y="0.0" width="481" height="238"/>
+                                                            <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" findStyle="panel" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" id="4FU-au-vlw" customClass="SchemeEditorTextView" customModule="Barliman" customModuleProvider="target">
+                                                                <rect key="frame" x="0.0" y="0.0" width="481" height="239"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                <size key="minSize" width="481" height="238"/>
+                                                                <size key="minSize" width="466" height="239"/>
                                                                 <size key="maxSize" width="617" height="10000000"/>
                                                                 <attributedString key="textStorage">
                                                                     <fragment>
@@ -1129,7 +1129,7 @@
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="r1s-hI-iMh">
-                                                        <rect key="frame" x="466" y="1" width="16" height="238"/>
+                                                        <rect key="frame" x="467" y="1" width="15" height="239"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1142,7 +1142,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                     </progressIndicator>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="0d5-fa-ceP" userLabel="Definitions Status Label">
-                                        <rect key="frame" x="-19" y="244" width="482.5" height="17"/>
+                                        <rect key="frame" x="-19" y="244" width="482" height="17"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="tRd-Vy-5v1">
                                             <font key="font" metaFont="system"/>
@@ -1153,28 +1153,28 @@
                                 </subviews>
                             </customView>
                             <customView id="pqt-qZ-911">
-                                <rect key="frame" x="0.0" y="270.5" width="493" height="274.5"/>
+                                <rect key="frame" x="0.0" y="271" width="493" height="274"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <subviews>
                                     <box borderType="line" title="Best Guess" id="omS-co-OrV" userLabel="Best Guess">
-                                        <rect key="frame" x="4" y="6.5" width="485" height="263.5"/>
+                                        <rect key="frame" x="4" y="6" width="485" height="263"/>
                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                         <view key="contentView" id="ZRc-6X-xDL">
-                                            <rect key="frame" x="1" y="1" width="483" height="244.5"/>
+                                            <rect key="frame" x="1" y="1" width="483" height="244"/>
                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                             <subviews>
                                                 <scrollView horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" usesPredominantAxisScrolling="NO" id="Pql-DL-um8">
-                                                    <rect key="frame" x="0.0" y="0.0" width="483" height="244.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="483" height="244"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <clipView key="contentView" id="uN1-sU-4Sj">
-                                                        <rect key="frame" x="1" y="1" width="481" height="242.5"/>
+                                                        <rect key="frame" x="1" y="1" width="466" height="242"/>
                                                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                         <subviews>
-                                                            <textView editable="NO" importsGraphics="NO" richText="NO" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="udr-Wg-VyJ" userLabel="Best Guess View">
-                                                                <rect key="frame" x="0.0" y="0.0" width="481" height="242.5"/>
+                                                            <textView editable="NO" importsGraphics="NO" richText="NO" verticallyResizable="YES" usesFontPanel="YES" findStyle="panel" continuousSpellChecking="YES" allowsUndo="YES" usesRuler="YES" allowsNonContiguousLayout="YES" quoteSubstitution="YES" dashSubstitution="YES" spellingCorrection="YES" smartInsertDelete="YES" id="udr-Wg-VyJ" userLabel="Best Guess View">
+                                                                <rect key="frame" x="0.0" y="0.0" width="481" height="242"/>
                                                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                                <size key="minSize" width="481" height="242.5"/>
+                                                                <size key="minSize" width="466" height="242"/>
                                                                 <size key="maxSize" width="617" height="10000000"/>
                                                                 <color key="insertionPointColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                                                                 <connections>
@@ -1189,7 +1189,7 @@
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                     <scroller key="verticalScroller" verticalHuggingPriority="750" horizontal="NO" id="9ze-ya-0Tb">
-                                                        <rect key="frame" x="466" y="1" width="16" height="242.5"/>
+                                                        <rect key="frame" x="467" y="1" width="15" height="242"/>
                                                         <autoresizingMask key="autoresizingMask"/>
                                                     </scroller>
                                                 </scrollView>
@@ -1198,11 +1198,11 @@
                                         <font key="titleFont" size="13" name=".AppleSystemUIFont"/>
                                     </box>
                                     <progressIndicator wantsLayer="YES" horizontalHuggingPriority="750" verticalHuggingPriority="750" misplaced="YES" maxValue="100" displayedWhenStopped="NO" bezeled="NO" indeterminate="YES" controlSize="small" style="spinning" id="sDx-rk-wjy">
-                                        <rect key="frame" x="470" y="254" width="16" height="16"/>
+                                        <rect key="frame" x="470" y="253" width="16" height="16"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                     </progressIndicator>
                                     <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="42x-bp-32O" userLabel="Best Guess Status Label">
-                                        <rect key="frame" x="-19" y="253" width="482.5" height="18"/>
+                                        <rect key="frame" x="-19" y="252" width="482" height="18"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="BWj-up-N9I">
                                             <font key="font" metaFont="system"/>
