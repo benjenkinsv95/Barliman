@@ -20,11 +20,6 @@
                 <outlet property="test1InputField" destination="dfp-gE-e7y" id="nOz-Cv-ape"/>
                 <outlet property="test1Spinner" destination="XLM-qT-jee" id="TqP-A1-Vq7"/>
                 <outlet property="test1StatusLabel" destination="YAo-sB-usO" id="hhE-Zp-p36"/>
-                <outlet property="test2StatusLabel" destination="40V-oL-GeG" id="rVc-1p-MSm"/>
-                <outlet property="test3StatusLabel" destination="uHv-aF-lmY" id="v2C-2E-4uf"/>
-                <outlet property="test4StatusLabel" destination="J2E-L7-t85" id="vkl-bb-DH7"/>
-                <outlet property="test5StatusLabel" destination="xoG-a5-gqq" id="fQy-nN-hbe"/>
-                <outlet property="test6StatusLabel" destination="yVL-ff-SSm" id="ZRt-MI-Ccb"/>
                 <outlet property="window" destination="F0z-JX-Cv5" id="ERh-Rc-rRE"/>
             </connections>
         </customObject>
@@ -84,51 +79,6 @@
                         <rect key="frame" x="680" y="511" width="321" height="17"/>
                         <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
                         <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DIc-CI-rwc">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="40V-oL-GeG" userLabel="Test 2 Status Label">
-                        <rect key="frame" x="680" y="427" width="321" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="aOz-oB-Yxh">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="uHv-aF-lmY" userLabel="Test 3 Status Label">
-                        <rect key="frame" x="680" y="340" width="321" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="UPI-X3-Ykn">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="J2E-L7-t85" userLabel="Test 4 Status Label">
-                        <rect key="frame" x="680" y="253" width="321" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="DrF-JK-Vkv">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="xoG-a5-gqq" userLabel="Test 5 Status Label">
-                        <rect key="frame" x="680" y="166" width="321" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="zyZ-uE-l2N">
-                            <font key="font" metaFont="system"/>
-                            <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
-                            <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
-                        </textFieldCell>
-                    </textField>
-                    <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" misplaced="YES" id="yVL-ff-SSm" userLabel="Test 6 Status Label">
-                        <rect key="frame" x="680" y="77" width="321" height="17"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" alignment="right" id="AVF-MA-UNe">
                             <font key="font" metaFont="system"/>
                             <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

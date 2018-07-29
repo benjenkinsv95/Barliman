@@ -285,11 +285,12 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
         let in1 = (processTest1 ? test1InputField.stringValue : "")
         let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
+        let test1 = SchemeTest(input: in1, output: out1, id: 1)
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
-        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, in1: in1, out1: out1)
+        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, test: test1)
 
         resetTestUIs(in1: in1, out1: out1)
     }
@@ -306,7 +307,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
 
-    func runCode(definitionText: String, interpreterSemantics: String, in1: String, out1: String) {
+    func runCode(definitionText: String,
+                 interpreterSemantics: String,
+                 test: SchemeTest) {
         // see how many operations are currently in the queue
         print("operation count: \(runSchemeOperationQueue.operationCount)")
         runSchemeOperationQueue.cancelAllOperations()
@@ -343,14 +346,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let newTest1ActualQueryString: String = makeQueryString(definitionText,
-                body: in1,
-                expectedOut: out1,
+                body: test.input,
+                expectedOut: test.output,
                 simple: false,
-                name: "-test1")
+                name: "-\(test.name)")
 
 
         let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText,
-                testInputs: [in1], testOutputs: [out1])
+                testInputs: [test.input], testOutputs: [test.output])
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
@@ -507,11 +510,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         runSchemeOperationQueue.addOperation(runSchemeOpSimple)
 
-        if shouldProcessTest(input: in1, output: out1) {
+        if shouldProcessTest(input: test.input, output: test.output) {
             print("queuing test1")
             runSchemeOperationQueue.addOperation(runSchemeOpTest1)
         }
     }
-
-
 }

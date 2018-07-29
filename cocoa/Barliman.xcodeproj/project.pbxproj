@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		17C8BB6E63013AAAB496484E /* SchemeTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C8B009489C90D1AA3D53E4 /* SchemeTest.swift */; };
 		372DE8181D4E4D47009725E1 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 372DE8171D4E4D47009725E1 /* Extensions.swift */; };
 		890FC1B01CFC071600D1FD73 /* SemanticsWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */; };
 		890FC1B41CFC097200D1FD73 /* SemanticsWindowController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */; };
@@ -40,6 +41,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		17C8B009489C90D1AA3D53E4 /* SchemeTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SchemeTest.swift; sourceTree = "<group>"; };
 		372DE8171D4E4D47009725E1 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; tabWidth = 4; };
 		890FC1AF1CFC071600D1FD73 /* SemanticsWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SemanticsWindowController.swift; sourceTree = "<group>"; };
 		890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SemanticsWindowController.xib; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				890FC1B31CFC097200D1FD73 /* SemanticsWindowController.xib */,
 				89B081511CF195F5007E6ABA /* mk-and-rel-interp */,
 				89C405A51CF426BE009970A7 /* RunSchemeOperation.swift */,
+				17C8B009489C90D1AA3D53E4 /* SchemeTest.swift */,
 			);
 			path = Barliman;
 			sourceTree = "<group>";
@@ -285,6 +288,7 @@
 				891E42F61CE6FD8D003C3333 /* AppDelegate.swift in Sources */,
 				89C405A61CF426BE009970A7 /* RunSchemeOperation.swift in Sources */,
 				89393D371D0C1BB30067D19A /* SchemeEditorTextView.swift in Sources */,
+				17C8BB6E63013AAAB496484E /* SchemeTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
