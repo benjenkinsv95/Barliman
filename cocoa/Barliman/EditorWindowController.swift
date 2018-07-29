@@ -61,11 +61,11 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     var schemeOperationAllTests: RunSchemeOperation?
 
     let processingQueue: OperationQueue = OperationQueue()
-    
+
     static func fontName() -> String {
         return "Monaco"
     }
-    
+
     static func fontSize() -> CGFloat {
         return 14
     }
@@ -73,8 +73,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     static func defaultColor() -> NSColor {
         return NSColor.black
     }
-    
-    
+
+
     override var windowNibName: String? {
         return "EditorWindowController"
     }
@@ -90,37 +90,37 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
         test3ExpectedOutputField.nextKeyView = test4InputField
-        
+
         let defaultFontName = EditorWindowController.fontName()
         let defaultFontSize = EditorWindowController.fontSize()
         let font = NSFont(name: defaultFontName, size: defaultFontSize)
-        
+
         schemeDefinitionView.font = NSFont(name: defaultFontName, size: defaultFontSize)
         bestGuessView.font = NSFont(name: defaultFontName, size: defaultFontSize)
-        
+
         test1InputField.font = font
         test2InputField.font = font
         test3InputField.font = font
         test4InputField.font = font
         test5InputField.font = font
         test6InputField.font = font
-        
+
         test1ExpectedOutputField.font = font
         test2ExpectedOutputField.font = font
         test3ExpectedOutputField.font = font
         test4ExpectedOutputField.font = font
         test5ExpectedOutputField.font = font
         test6ExpectedOutputField.font = font
-        
+
         // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
         self.definitionAndBestGuessSplitView.delegate = self
     }
-    
+
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
     func splitView(_ splitView: NSSplitView, constrainMinCoordinate proposedMinimumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         return proposedMinimumPosition + 30
     }
-    
+
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
     func splitView(_ splitView: NSSplitView, constrainMaxCoordinate proposedMaximumPosition: CGFloat, ofSubviewAt dividerIndex: Int) -> CGFloat {
         return proposedMaximumPosition - 50
@@ -149,7 +149,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             print("$$$$  Oh noes!  Looks like there is a Scheme process still running!")
         }
     }
-    
+
     func textDidChange(_ notification: Notification) {
         // NSTextView text changed
         print("@@@@@@@@@@@@@@@@@@@ textDidChange")
@@ -167,7 +167,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     func setupRunCodeFromEditPaneTimer() {
         runCodeFromEditPaneTimer?.invalidate()
 
-        runCodeFromEditPaneTimer = .scheduledTimer(timeInterval: 1, target:self, selector: #selector(runCodeFromEditPane), userInfo: nil, repeats: false)
+        runCodeFromEditPaneTimer = .scheduledTimer(timeInterval: 1, target: self, selector: #selector(runCodeFromEditPane), userInfo: nil, repeats: false)
     }
 
     func makeQuerySimpleForMondoSchemeFileString(_ interp_string: String,
@@ -175,40 +175,40 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                                                  mk_vicare_path_string: String,
                                                  mk_path_string: String) -> String {
 
-        let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
-        let load_mk_string: String = "(load \"\( mk_path_string )\")"
+        let load_mk_vicare_string: String = "(load \"\(mk_vicare_path_string)\")"
+        let load_mk_string: String = "(load \"\(mk_path_string)\")"
 
-        let querySimple: String =   makeQueryString(definitionText,
-                                                    body: ",_",
-                                                    expectedOut: "q",
-                                                    simple: true,
-                                                    name: "-simple")
+        let querySimple: String = makeQueryString(definitionText,
+                body: ",_",
+                expectedOut: "q",
+                simple: true,
+                name: "-simple")
 
 
         let full_string: String = load_mk_vicare_string + "\n" +
-                                  load_mk_string + "\n" +
-                                  interp_string + "\n" +
-                                  querySimple
+                load_mk_string + "\n" +
+                interp_string + "\n" +
+                querySimple
 
         return full_string
     }
 
     private func makeAllTestsQueryString(definitionText: String, in1: String, in2: String = "", in3: String = "",
                                          in4: String = "", in5: String = "", in6: String = "",
-                                         out1: String, out2: String  = "", out3: String  = "", out4: String  = "",
-                                         out5: String  = "", out6: String = "") -> String {
+                                         out1: String, out2: String = "", out3: String = "", out4: String = "",
+                                         out5: String = "", out6: String = "") -> String {
         let allTestInputs = in1 + " "
-            + in2 + " "
-            + in3 + " "
-            + in4 + " "
-            + in5 + " "
-            + in6 + " "
+                + in2 + " "
+                + in3 + " "
+                + in4 + " "
+                + in5 + " "
+                + in6 + " "
         let allTestOutputs = out1 + " "
-            + out2 + " "
-            + out3 + " "
-            + out4 + " "
-            + out5 + " "
-            + out6 + " "
+                + out2 + " "
+                + out3 + " "
+                + out4 + " "
+                + out5 + " "
+                + out6 + " "
 
         // get the path to the application's bundle, so we can load the query string files
         let bundle = Bundle.main
@@ -217,54 +217,48 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let interp_alltests_query_string_part_1: String? = bundle.path(forResource: "interp-alltests-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
         let interp_alltests_query_string_part_2: String? = bundle.path(forResource: "interp-alltests-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
-        let alltests_string_part_1 : String
-        do
-        {
+        let alltests_string_part_1: String
+        do {
             alltests_string_part_1 = try String(contentsOfFile: interp_alltests_query_string_part_1!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_1\n")
             alltests_string_part_1 = ""
         }
 
-        let alltests_string_part_2 : String
-        do
-        {
+        let alltests_string_part_2: String
+        do {
             alltests_string_part_2 = try String(contentsOfFile: interp_alltests_query_string_part_2!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load alltests_string_part_2\n")
             alltests_string_part_2 = ""
         }
 
         let eval_flags_fast = "(set! allow-incomplete-search? #t)"
         let eval_flags_complete = "(set! allow-incomplete-search? #f)"
-        let eval_string_fast = "(begin \( eval_flags_fast ) (results))"
-        let eval_string_complete = "(begin \( eval_flags_complete ) (results))"
+        let eval_string_fast = "(begin \(eval_flags_fast) (results))"
+        let eval_string_complete = "(begin \(eval_flags_complete) (results))"
 
         let allTestWriteString = "(define (ans-allTests)\n" +
-                                 "  (define (results)\n" +
-                                 alltests_string_part_1 + "\n" +
-            "        (== `( \( definitionText ) ) defn-list)" + "\n" + "\n" +
-            alltests_string_part_2 + "\n" +
-            "(== `(" +
-            definitionText +
-            ") defns) (appendo defns `(((lambda x x) " +
-            allTestInputs +
-            ")) begin-body) (evalo `(begin . ,begin-body) (list " +
-            allTestOutputs +
-            ")" +
-        ")))))\n" +
-        "(let ((results-fast \( eval_string_fast )))\n" +
-        "  (if (null? results-fast)\n" +
-        "    \( eval_string_complete )\n" +
-        "    results-fast)))"
+                "  (define (results)\n" +
+                alltests_string_part_1 + "\n" +
+                "        (== `( \(definitionText) ) defn-list)" + "\n" + "\n" +
+                alltests_string_part_2 + "\n" +
+                "(== `(" +
+                definitionText +
+                ") defns) (appendo defns `(((lambda x x) " +
+                allTestInputs +
+                ")) begin-body) (evalo `(begin . ,begin-body) (list " +
+                allTestOutputs +
+                ")" +
+                ")))))\n" +
+                "(let ((results-fast \(eval_string_fast)))\n" +
+                "  (if (null? results-fast)\n" +
+                "    \(eval_string_complete)\n" +
+                "    results-fast)))"
 
         let fullString: String = ";; allTests" + "\n" + allTestWriteString
 
-        print("queryAllTests string:\n \( fullString )\n")
+        print("queryAllTests string:\n \(fullString)\n")
         return fullString
     }
 
@@ -274,14 +268,13 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                          simple: Bool,
                          name: String) -> String {
 
-        let parse_ans_string: String = "(define (parse-ans\( name )) (run 1 (q)" + "\n" +
-            " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
-            "(fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \( defns ) \( body )))))))"
+        let parse_ans_string: String = "(define (parse-ans\(name)) (run 1 (q)" + "\n" +
+                " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
+                "(fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (parseo `(begin \(defns) \(body)))))))"
 
-        let parse_with_fake_defns_ans_string: String = "(define (parse-ans\( name )) (run 1 (q)" + "\n" +
-            " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
-            " (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \( defns ) ) names) (parseo `((lambda ,names \( body )) ,dummy-expr)))))))"
-
+        let parse_with_fake_defns_ans_string: String = "(define (parse-ans\(name)) (run 1 (q)" + "\n" +
+                " (let ((g1 (gensym \"g1\")) (g2 (gensym \"g2\")) (g3 (gensym \"g3\")) (g4 (gensym \"g4\")) (g5 (gensym \"g5\")) (g6 (gensym \"g6\")) (g7 (gensym \"g7\")) (g8 (gensym \"g8\")) (g9 (gensym \"g9\")) (g10 (gensym \"g10\")) (g11 (gensym \"g11\")) (g12 (gensym \"g12\")) (g13 (gensym \"g13\")) (g14 (gensym \"g14\")) (g15 (gensym \"g15\")) (g16 (gensym \"g16\")) (g17 (gensym \"g17\")) (g18 (gensym \"g18\")) (g19 (gensym \"g19\")) (g20 (gensym \"g20\")))" + "\n" +
+                " (fresh (A B C D E F G H I J K L M N O P Q R S T U V W X Y Z _) (fresh (names dummy-expr) (extract-nameso `( \(defns) ) names) (parseo `((lambda ,names \(body)) ,dummy-expr)))))))"
 
 
         // get the path to the application's bundle, so we can load the query string files
@@ -291,53 +284,47 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let interp_eval_query_string_part_1: String? = bundle.path(forResource: "interp-eval-query-string-part-1", ofType: "swift", inDirectory: "mk-and-rel-interp")
         let interp_eval_query_string_part_2: String? = bundle.path(forResource: "interp-eval-query-string-part-2", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
-        let eval_string_part_1 : String
-        do
-        {
+        let eval_string_part_1: String
+        do {
             eval_string_part_1 = try String(contentsOfFile: interp_eval_query_string_part_1!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load eval_string_part_1\n")
             eval_string_part_1 = ""
         }
 
-        let eval_string_part_2 : String
-        do
-        {
+        let eval_string_part_2: String
+        do {
             eval_string_part_2 = try String(contentsOfFile: interp_eval_query_string_part_2!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load eval_string_part_2\n")
             eval_string_part_2 = ""
         }
 
         let eval_string = eval_string_part_1 + "\n" +
-            "        (== `( \( defns ) ) defn-list)" + "\n" +
-            eval_string_part_2 + "\n" +
-            " (evalo `(begin \( defns ) \( body )) \( expectedOut )))))"
+                "        (== `( \(defns) ) defn-list)" + "\n" +
+                eval_string_part_2 + "\n" +
+                " (evalo `(begin \(defns) \(body)) \(expectedOut)))))"
 
         let eval_flags_fast = "(set! allow-incomplete-search? #t)"
         let eval_flags_complete = "(set! allow-incomplete-search? #f)"
 
-        let eval_string_fast = "(begin \( eval_flags_fast ) \( eval_string ))"
-        let eval_string_complete = "(begin \( eval_flags_complete ) \( eval_string ))"
-        let eval_string_both = "(let ((results-fast \( eval_string_fast )))\n" +
-                               "  (if (null? results-fast)\n" +
-                               "    \( eval_string_complete )\n" +
-                               "     results-fast))"
+        let eval_string_fast = "(begin \(eval_flags_fast) \(eval_string))"
+        let eval_string_complete = "(begin \(eval_flags_complete) \(eval_string))"
+        let eval_string_both = "(let ((results-fast \(eval_string_fast)))\n" +
+                "  (if (null? results-fast)\n" +
+                "    \(eval_string_complete)\n" +
+                "     results-fast))"
 
-        let define_ans_string: String = "(define (query-val\( name ))" + "\n" +
-                                        "  (if (null? (parse-ans\( name )))" + "\n" +
-                                        "      'parse-error" + "\n" +
-                                        "      \( eval_string_both )))"
+        let define_ans_string: String = "(define (query-val\(name))" + "\n" +
+                "  (if (null? (parse-ans\(name)))" + "\n" +
+                "      'parse-error" + "\n" +
+                "      \(eval_string_both)))"
 
         let full_string: String = (simple ? ";; simple query" : ";; individual test query") + "\n\n" +
-                                  (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n\n" +
-                                  define_ans_string + "\n\n"
+                (simple ? parse_ans_string : parse_with_fake_defns_ans_string) + "\n\n" +
+                define_ans_string + "\n\n"
 
-        print("query string:\n \( full_string )\n")
+        print("query string:\n \(full_string)\n")
 
         return full_string
     }
@@ -369,21 +356,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
-
-        let allTestInputs = in1 + " "
-                + in2 + " "
-                + in3 + " "
-                + in4 + " "
-                + in5 + " "
-                + in6 + " "
-        let allTestOutputs = out1 + " "
-                + out2 + " "
-                + out3 + " "
-                + out4 + " "
-                + out5 + " "
-                + out6 + " "
-
-
 
 
         // see how many operations are currently in the queue
@@ -428,109 +400,93 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let mk_vicare_path_string = mk_vicare_path! as String
         let mk_path_string = mk_path! as String
 
-        let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
-        let load_mk_string: String = "(load \"\( mk_path_string )\")"
+        let load_mk_vicare_string: String = "(load \"\(mk_vicare_path_string)\")"
+        let load_mk_string: String = "(load \"\(mk_path_string)\")"
 
         let interp_string: String = semanticsWindowController!.getInterpreterCode()
 
 
         let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
                 definitionText: definitionText,
-                                                                                                mk_vicare_path_string: mk_vicare_path_string,
-                                                                                                mk_path_string: mk_path_string)
+                mk_vicare_path_string: mk_vicare_path_string,
+                mk_path_string: mk_path_string)
 
 
+        let newTest1ActualQueryString: String = makeQueryString(definitionText,
+                body: test1InputField.stringValue,
+                expectedOut: test1ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test1")
 
+        let newTest2ActualQueryString: String = makeQueryString(definitionText,
+                body: test2InputField.stringValue,
+                expectedOut: test2ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test2")
 
+        let newTest3ActualQueryString: String = makeQueryString(definitionText,
+                body: test3InputField.stringValue,
+                expectedOut: test3ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test3")
 
-        let newTest1ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test1InputField.stringValue,
-                                                         expectedOut: test1ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test1")
+        let newTest4ActualQueryString: String = makeQueryString(definitionText,
+                body: test4InputField.stringValue,
+                expectedOut: test4ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test4")
 
-        let newTest2ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test2InputField.stringValue,
-                                                         expectedOut: test2ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test2")
+        let newTest5ActualQueryString: String = makeQueryString(definitionText,
+                body: test5InputField.stringValue,
+                expectedOut: test5ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test5")
 
-        let newTest3ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test3InputField.stringValue,
-                                                         expectedOut: test3ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test3")
-
-        let newTest4ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test4InputField.stringValue,
-                                                         expectedOut: test4ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test4")
-
-        let newTest5ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test5InputField.stringValue,
-                                                         expectedOut: test5ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test5")
-
-        let newTest6ActualQueryString: String =   makeQueryString(definitionText,
-                                                         body: test6InputField.stringValue,
-                                                         expectedOut: test6ExpectedOutputField.stringValue,
-                                                         simple: false,
-                                                         name: "-test6")
+        let newTest6ActualQueryString: String = makeQueryString(definitionText,
+                body: test6InputField.stringValue,
+                expectedOut: test6ExpectedOutputField.stringValue,
+                simple: false,
+                name: "-test6")
 
 
         let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6,
                 out1: out1, out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
 
 
-
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
         let new_simple_query_template: String? = bundle.path(forResource: "barliman-new-simple-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
-        let new_simple_query_template_string : String
-        do
-        {
+        let new_simple_query_template_string: String
+        do {
             new_simple_query_template_string = try String(contentsOfFile: new_simple_query_template!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load new_simple_query_template\n")
             new_simple_query_template_string = ""
         }
 
 
-
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
         let new_test_query_template: String? = bundle.path(forResource: "barliman-new-test-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
-        let new_test_query_template_string : String
-        do
-        {
+        let new_test_query_template_string: String
+        do {
             new_test_query_template_string = try String(contentsOfFile: new_test_query_template!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load new_test_query_template\n")
             new_test_query_template_string = ""
         }
 
 
-
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
         let new_alltests_query_template: String? = bundle.path(forResource: "barliman-new-alltests-query-template", ofType: "swift", inDirectory: "mk-and-rel-interp")
 
-        let new_alltests_query_template_string : String
-        do
-        {
+        let new_alltests_query_template_string: String
+        do {
             new_alltests_query_template_string = try String(contentsOfFile: new_alltests_query_template!)
-        }
-        catch
-        {
+        } catch {
             print("!!!!!  LOAD_ERROR -- can't load new_test_query_template\n")
             new_alltests_query_template_string = ""
         }
-
 
 
         let newSimpleQueryString: String
@@ -570,23 +526,22 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
 
 
-
             let loadFileString =
-                "(define simple-query-for-mondo-file-path \"\( localSimpleQueryForMondoSchemeFilePath )\")"
+                    "(define simple-query-for-mondo-file-path \"\(localSimpleQueryForMondoSchemeFilePath)\")"
 
             newSimpleQueryString = loadFileString + "\n\n" + new_simple_query_template_string
 
             newAlltestsQueryString =
-                loadFileString + "\n\n" +
-                "(define actual-query-file-path \"\( localNewQueryActualAlltestsFilePath )\")" + "\n\n" +
-                new_alltests_query_template_string
+                    loadFileString + "\n\n" +
+                            "(define actual-query-file-path \"\(localNewQueryActualAlltestsFilePath)\")" + "\n\n" +
+                            new_alltests_query_template_string
 
 
             func makeNewTestNQueryString(_ n: Int, actualQueryFilePath: String) -> String {
                 return loadFileString + "\n\n" +
-                    "(define actual-query-file-path \"\( actualQueryFilePath )\")" + "\n\n" +
-                    "(define (test-query-fn) (query-val-test\( n )))" + "\n\n\n" +
-                    new_test_query_template_string
+                        "(define actual-query-file-path \"\(actualQueryFilePath)\")" + "\n\n" +
+                        "(define (test-query-fn) (query-val-test\(n)))" + "\n\n\n" +
+                        new_test_query_template_string
             }
 
             newTest1QueryString = makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTest1FilePath)
@@ -608,9 +563,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             newTest6QueryString = ""
             newAlltestsQueryString = ""
         }
-
-
-
 
 
         var pathQuerySimpleForMondoSchemeFile: URL!
@@ -681,8 +633,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                 try newTest5ActualQueryString.write(to: pathNewActualTest5, atomically: false, encoding: String.Encoding.utf8)
                 try newTest6ActualQueryString.write(to: pathNewActualTest6, atomically: false, encoding: String.Encoding.utf8)
                 try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
-            }
-            catch {
+            } catch {
                 // this error handling could be better!  :)
                 print("couldn't write to query files")
             }
@@ -732,9 +683,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewAlltests, taskType: "allTests")
 
 
-
         schemeOperationAllTests = runSchemeOpAllTests
-
 
 
         // wait until the previous operations kill their tasks and finish, before adding the new operations
@@ -792,7 +741,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
     }
-
 
 
 }
