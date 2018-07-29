@@ -329,11 +329,13 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         return full_string
     }
 
+    func shouldProcessTest(input: String, output: String) -> Bool {
+        return !input.isEmpty && !output.isEmpty
+    }
 
+    // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
     func runCodeFromEditPane() {
-
-        // The text in the code pane changed!  Launch a new Scheme task to evaluate the new expression...
-
+        // Extract data from UI
         let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
         let processTest2 = !test2InputField.stringValue.isEmpty && !test2ExpectedOutputField.stringValue.isEmpty
         let processTest3 = !test3InputField.stringValue.isEmpty && !test3ExpectedOutputField.stringValue.isEmpty
@@ -357,7 +359,47 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
 
+        runCode(definitionText: definitionText, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
+                out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
 
+        resetTestUIs(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
+                out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
+    }
+
+    func resetTestUIs(in1: String, in2: String = "", in3: String = "",
+                      in4: String = "", in5: String = "", in6: String = "",
+                      out1: String, out2: String = "", out3: String = "", out4: String = "",
+                      out5: String = "", out6: String = "") {
+        func resetTestUI(_ statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
+            statusLabel.stringValue = ""
+            inputField.textColor = EditorWindowController.defaultColor()
+            outputField.textColor = EditorWindowController.defaultColor()
+        }
+
+        if !shouldProcessTest(input: in1, output: out1) {
+            resetTestUI(test1StatusLabel, inputField: test1InputField, outputField: test1ExpectedOutputField)
+        }
+        if !shouldProcessTest(input: in2, output: out2) {
+            resetTestUI(test2StatusLabel, inputField: test2InputField, outputField: test2ExpectedOutputField)
+        }
+        if !shouldProcessTest(input: in3, output: out3) {
+            resetTestUI(test3StatusLabel, inputField: test3InputField, outputField: test3ExpectedOutputField)
+        }
+        if !shouldProcessTest(input: in4, output: out4) {
+            resetTestUI(test4StatusLabel, inputField: test4InputField, outputField: test4ExpectedOutputField)
+        }
+        if !shouldProcessTest(input: in5, output: out5) {
+            resetTestUI(test5StatusLabel, inputField: test5InputField, outputField: test5ExpectedOutputField)
+        }
+        if !shouldProcessTest(input: in6, output: out6) {
+            resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
+        }
+    }
+
+    func runCode(definitionText: String, in1: String, in2: String = "", in3: String = "",
+               in4: String = "", in5: String = "", in6: String = "",
+               out1: String, out2: String = "", out3: String = "", out4: String = "",
+               out5: String = "", out6: String = "") {
         // see how many operations are currently in the queue
         print("operation count: \(processingQueue.operationCount)")
 
@@ -698,47 +740,29 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         processingQueue.addOperation(runSchemeOpSimple)
 
-        func resetTestUI(_ statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
-            statusLabel.stringValue = ""
-            inputField.textColor = EditorWindowController.defaultColor()
-            outputField.textColor = EditorWindowController.defaultColor()
-        }
-
-        if processTest1 {
+        if shouldProcessTest(input: in1, output: out1) {
             print("queuing test1")
             processingQueue.addOperation(runSchemeOpTest1)
-        } else {
-            resetTestUI(test1StatusLabel, inputField: test1InputField, outputField: test1ExpectedOutputField)
         }
-        if processTest2 {
+        if shouldProcessTest(input: in2, output: out2) {
             print("queuing test2")
             processingQueue.addOperation(runSchemeOpTest2)
-        } else {
-            resetTestUI(test2StatusLabel, inputField: test2InputField, outputField: test2ExpectedOutputField)
         }
-        if processTest3 {
+        if shouldProcessTest(input: in3, output: out3) {
             print("queuing test3")
             processingQueue.addOperation(runSchemeOpTest3)
-        } else {
-            resetTestUI(test3StatusLabel, inputField: test3InputField, outputField: test3ExpectedOutputField)
         }
-        if processTest4 {
+        if shouldProcessTest(input: in4, output: out4) {
             print("queuing test4")
             processingQueue.addOperation(runSchemeOpTest4)
-        } else {
-            resetTestUI(test4StatusLabel, inputField: test4InputField, outputField: test4ExpectedOutputField)
         }
-        if processTest5 {
+        if shouldProcessTest(input: in5, output: out5) {
             print("queuing test5")
             processingQueue.addOperation(runSchemeOpTest5)
-        } else {
-            resetTestUI(test5StatusLabel, inputField: test5InputField, outputField: test5ExpectedOutputField)
         }
-        if processTest6 {
+        if shouldProcessTest(input: in6, output: out6) {
             print("queuing test6")
             processingQueue.addOperation(runSchemeOpTest6)
-        } else {
-            resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
     }
 
