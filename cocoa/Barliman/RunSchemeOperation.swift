@@ -26,13 +26,15 @@ class RunSchemeOperation: Operation {
     let kParseErrorString = "Syntax error"
     let kEvaluationFailedString = "Evaluation failed"
     let kThinkingString = "???"
+    let test: SchemeTest?
 
 
-    init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String) {
+    init(editorWindowController: EditorWindowController, schemeScriptPathString: String, taskType: String, test: SchemeTest? = nil) {
         self.editorWindowController = editorWindowController
         self.schemeScriptPathString = schemeScriptPathString
         self.task = Process()
         self.taskType = taskType
+        self.test = test
     }
 
     override func cancel() {
@@ -123,12 +125,15 @@ class RunSchemeOperation: Operation {
                 ewc.bestGuessStatusLabel.textColor = self.kThinkingColor
                 ewc.bestGuessStatusLabel.stringValue = self.kThinkingString
                 ewc.bestGuessView.textColor = self.kThinkingColor
-            case "test1":
-                ewc.test1StatusLabel.textColor = self.kThinkingColor
-                ewc.test1StatusLabel.stringValue = self.kThinkingString
-                ewc.test1InputField.textColor = self.kThinkingColor
-                ewc.test1ExpectedOutputField.textColor = self.kThinkingColor
-            default: print("!!!!!!!!!! SWITCHERROR in thinkingColorAndLabel: unknown taskType: \( self.taskType )\n")
+            default:
+                if let testView = self.test?.view {
+                    testView.statusLabel.textColor = self.kThinkingColor
+                    testView.statusLabel.stringValue = self.kThinkingString
+                    testView.inputField.textColor = self.kThinkingColor
+                    testView.expectedOutputField.textColor = self.kThinkingColor
+                } else {
+                    print("!!!!!!!!!! SWITCHERROR in thinkingColorAndLabel: unknown taskType: \( self.taskType )\n")
+                }
             }
         }
     }
@@ -355,9 +360,15 @@ class RunSchemeOperation: Operation {
                         ewc.definitionStatusLabel.stringValue = ""
                     }
                 }
-                if taskType == "test1" {
-                    onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel, datastring: datastring)
+
+                if let testView = self.test?.view {
+                    onTestCompletion(testView.inputField,
+                            outputField: testView.expectedOutputField,
+                            spinner: testView.spinner,
+                            label: testView.statusLabel, datastring: datastring)
+
                 }
+
                 if self.taskType == "allTests" {
                     if datastring == "fail" {
                         onBestGuessFailure(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
@@ -375,10 +386,11 @@ class RunSchemeOperation: Operation {
                 }
 
                 // individual tests must have been cancelled by allTests succeeding, meaning that all the individual tests should succeed
-                if taskType == "test1" {
-                    onTestSuccess(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, label: ewc.test1StatusLabel)
+                if let testView = self.test?.view {
+                    onTestSuccess(testView.inputField,
+                            outputField: testView.expectedOutputField,
+                            label: testView.statusLabel)
                 }
-
 
             } else {
                 // the query wasn't even a legal s-expression, according to Chez!
@@ -387,9 +399,13 @@ class RunSchemeOperation: Operation {
                     self.illegalSexpInDefn()
                 }
 
-                if taskType == "test1" {
-                    onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel)
+                if let testView = self.test?.view {
+                    onTestSyntaxError(testView.inputField,
+                            outputField: testView.expectedOutputField,
+                            spinner: testView.spinner,
+                            label: testView.statusLabel)
                 }
+
                 if taskType == "allTests" {
                     onSyntaxErrorBestGuess(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
                 }
