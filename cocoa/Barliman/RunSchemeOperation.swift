@@ -58,8 +58,12 @@ class RunSchemeOperation: Operation {
             switch self.taskType {
             case "simple":   ewc.schemeDefinitionSpinner.startAnimation(self)
             case "allTests": ewc.bestGuessSpinner.startAnimation(self)
-            case "test1":    ewc.test1Spinner.startAnimation(self)
-            default: print("!!!!!!!!!! SWITCHERROR in startSpinner: unknown taskType: \( self.taskType )\n")
+            default:
+                if let testView = self.test?.view {
+                    testView.spinner.startAnimation(self)
+                } else {
+                    print("!!!!!!!!!! SWITCHERROR in startSpinner: unknown taskType: \( self.taskType )\n")
+                }
             }
         }
     }
@@ -74,8 +78,12 @@ class RunSchemeOperation: Operation {
             switch self.taskType {
                 case "simple":   ewc.schemeDefinitionSpinner.stopAnimation(self)
                 case "allTests": ewc.bestGuessSpinner.stopAnimation(self)
-                case "test1":    ewc.test1Spinner.stopAnimation(self)
-                default: print("!!!!!!!!!! SWITCHERROR in stopSpinner: unknown taskType: \( self.taskType )\n")
+                default:
+                    if let testView = self.test?.view {
+                        testView.spinner.stopAnimation(self)
+                    } else {
+                        print("!!!!!!!!!! SWITCHERROR in stopSpinner: unknown taskType: \(self.taskType)\n")
+                    }
             }
         }
     }
