@@ -194,7 +194,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         return full_string
     }
 
-
     func makeAllTestsQueryString() -> String {
 
         let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
@@ -218,6 +217,13 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
         let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
 
+        return makeAllTestsQueryString(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1, out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
+    }
+
+    private func makeAllTestsQueryString(in1: String, in2: String = "", in3: String = "",
+                                         in4: String = "", in5: String = "", in6: String = "",
+                                         out1: String, out2: String  = "", out3: String  = "", out4: String  = "",
+                                         out5: String  = "", out6: String = "") -> String {
         let allTestInputs = in1 + " "
             + in2 + " "
             + in3 + " "
@@ -289,6 +295,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         print("queryAllTests string:\n \( fullString )\n")
 
+        let output = fullString
         return fullString
     }
 
@@ -377,6 +384,33 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let processTest4 = !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty
         let processTest5 = !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty
         let processTest6 = !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty
+
+        let in1 = (processTest1 ? test1InputField.stringValue : "")
+        let in2 = (processTest2 ? test2InputField.stringValue : "")
+        let in3 = (processTest3 ? test3InputField.stringValue : "")
+        let in4 = (processTest4 ? test4InputField.stringValue : "")
+        let in5 = (processTest5 ? test5InputField.stringValue : "")
+        let in6 = (processTest6 ? test6InputField.stringValue : "")
+
+        let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
+        let out2 = (processTest2 ? test2ExpectedOutputField.stringValue : "")
+        let out3 = (processTest3 ? test3ExpectedOutputField.stringValue : "")
+        let out4 = (processTest4 ? test4ExpectedOutputField.stringValue : "")
+        let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
+        let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
+
+        let allTestInputs = in1 + " "
+                + in2 + " "
+                + in3 + " "
+                + in4 + " "
+                + in5 + " "
+                + in6 + " "
+        let allTestOutputs = out1 + " "
+                + out2 + " "
+                + out3 + " "
+                + out4 + " "
+                + out5 + " "
+                + out6 + " "
 
 
         // see how many operations are currently in the queue
@@ -474,7 +508,8 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                                                          name: "-test6")
 
 
-        let newAlltestsActualQueryString = makeAllTestsQueryString()
+        let newAlltestsActualQueryString = makeAllTestsQueryString(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6,
+                out1: out1, out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
 
 
 
@@ -603,32 +638,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
 
 
-        let in1 = (processTest1 ? test1InputField.stringValue : "")
-        let in2 = (processTest2 ? test2InputField.stringValue : "")
-        let in3 = (processTest3 ? test3InputField.stringValue : "")
-        let in4 = (processTest4 ? test4InputField.stringValue : "")
-        let in5 = (processTest5 ? test5InputField.stringValue : "")
-        let in6 = (processTest6 ? test6InputField.stringValue : "")
 
-        let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
-        let out2 = (processTest2 ? test2ExpectedOutputField.stringValue : "")
-        let out3 = (processTest3 ? test3ExpectedOutputField.stringValue : "")
-        let out4 = (processTest4 ? test4ExpectedOutputField.stringValue : "")
-        let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
-        let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
-
-        let allTestInputs = in1 + " "
-                          + in2 + " "
-                          + in3 + " "
-                          + in4 + " "
-                          + in5 + " "
-                          + in6 + " "
-        let allTestOutputs = out1 + " "
-                           + out2 + " "
-                           + out3 + " "
-                           + out4 + " "
-                           + out5 + " "
-                           + out6 + " "
 
 
         var pathQuerySimpleForMondoSchemeFile: URL!
@@ -810,4 +820,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
     }
+
+
+
 }
