@@ -78,6 +78,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
         self.definitionAndBestGuessSplitView.delegate = self
+
+
+        runCodeFromEditPane()
     }
 
     // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews

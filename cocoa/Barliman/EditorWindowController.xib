@@ -50,7 +50,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Zi0-kV-0Zv" userLabel="Test 1 Expected Output">
                                     <rect key="frame" x="4" y="0.0" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="`(a b)" drawsBackground="YES" id="bMe-If-e1j">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="`(,g1 ,g2)" drawsBackground="YES" id="bMe-If-e1j">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -62,7 +62,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="dfp-gE-e7y" userLabel="Test 1 Input">
                                     <rect key="frame" x="4" y="33" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="(append '(a) '(b))" drawsBackground="YES" id="NPE-z4-TYw">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="(append '(,g1) '(,g2))" drawsBackground="YES" id="NPE-z4-TYw">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -98,7 +98,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="gdx-YV-50A" userLabel="Test 1 Expected Output">
                                     <rect key="frame" x="4" y="0.0" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="mPm-SL-7iO">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="`(,g3 ,g4)" drawsBackground="YES" id="mPm-SL-7iO">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
@@ -110,7 +110,7 @@
                                 <textField verticalHuggingPriority="750" horizontalCompressionResistancePriority="250" id="Zk9-VL-qgY" userLabel="Test 1 Input">
                                     <rect key="frame" x="4" y="33" width="522" height="26"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES"/>
-                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" drawsBackground="YES" id="kEi-It-mMd">
+                                    <textFieldCell key="cell" selectable="YES" editable="YES" sendsActionOnEndEditing="YES" state="on" borderStyle="bezel" title="(append '(,g3 ,g4) '())" drawsBackground="YES" id="kEi-It-mMd">
                                         <font key="font" size="14" name="Monaco"/>
                                         <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                         <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
