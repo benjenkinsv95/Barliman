@@ -171,13 +171,12 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     }
 
     func makeQuerySimpleForMondoSchemeFileString(_ interp_string: String,
+                                                 definitionText: String,
                                                  mk_vicare_path_string: String,
                                                  mk_path_string: String) -> String {
 
         let load_mk_vicare_string: String = "(load \"\( mk_vicare_path_string )\")"
         let load_mk_string: String = "(load \"\( mk_path_string )\")"
-
-        let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
 
         let querySimple: String =   makeQueryString(definitionText,
                                                     body: ",_",
@@ -436,6 +435,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let querySimpleForMondoSchemeContents: String = makeQuerySimpleForMondoSchemeFileString(interp_string,
+                definitionText: definitionText,
                                                                                                 mk_vicare_path_string: mk_vicare_path_string,
                                                                                                 mk_path_string: mk_path_string)
 
