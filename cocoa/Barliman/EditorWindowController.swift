@@ -10,48 +10,20 @@ import Cocoa
 
 class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
-    // Making these views weak references seems to cause a runtime error.  Why?
-    @IBOutlet var schemeDefinitionView: NSTextView!
-    @IBOutlet var bestGuessView: NSTextView!
-
-    @IBOutlet weak var test1InputField: NSTextField!
-    @IBOutlet weak var test1ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var test2InputField: NSTextField!
-    @IBOutlet weak var test2ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var test3InputField: NSTextField!
-    @IBOutlet weak var test3ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var test4InputField: NSTextField!
-    @IBOutlet weak var test4ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var test5InputField: NSTextField!
-    @IBOutlet weak var test5ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var test6InputField: NSTextField!
-    @IBOutlet weak var test6ExpectedOutputField: NSTextField!
-
-    @IBOutlet weak var schemeDefinitionSpinner: NSProgressIndicator!
-    @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
-    @IBOutlet weak var test1Spinner: NSProgressIndicator!
-    @IBOutlet weak var test2Spinner: NSProgressIndicator!
-    @IBOutlet weak var test3Spinner: NSProgressIndicator!
-    @IBOutlet weak var test4Spinner: NSProgressIndicator!
-    @IBOutlet weak var test5Spinner: NSProgressIndicator!
-    @IBOutlet weak var test6Spinner: NSProgressIndicator!
-
-    @IBOutlet weak var definitionStatusLabel: NSTextField!
-    @IBOutlet weak var test1StatusLabel: NSTextField!
-    @IBOutlet weak var test2StatusLabel: NSTextField!
-    @IBOutlet weak var test3StatusLabel: NSTextField!
-    @IBOutlet weak var test4StatusLabel: NSTextField!
-    @IBOutlet weak var test5StatusLabel: NSTextField!
-    @IBOutlet weak var test6StatusLabel: NSTextField!
-    @IBOutlet weak var bestGuessStatusLabel: NSTextField!
-
     @IBOutlet weak var definitionAndBestGuessSplitView: NSSplitView!
 
+    @IBOutlet var schemeDefinitionView: NSTextView!
+    @IBOutlet weak var schemeDefinitionSpinner: NSProgressIndicator!
+    @IBOutlet weak var definitionStatusLabel: NSTextField!
+
+    @IBOutlet var bestGuessView: NSTextView!
+    @IBOutlet weak var bestGuessSpinner: NSProgressIndicator!
+    @IBOutlet weak var bestGuessStatusLabel: NSTextField!
+
+    @IBOutlet weak var test1Spinner: NSProgressIndicator!
+    @IBOutlet weak var test1InputField: NSTextField!
+    @IBOutlet weak var test1ExpectedOutputField: NSTextField!
+    @IBOutlet weak var test1StatusLabel: NSTextField!
 
     var runCodeFromEditPaneTimer: Timer?
 
@@ -88,9 +60,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         schemeDefinitionView.isAutomaticQuoteSubstitutionEnabled = false
         bestGuessView.isAutomaticQuoteSubstitutionEnabled = false
 
-        // For whatever reason, the tabbing from Test 3 Expected Output doesn't got to Test 4 Input
-        test3ExpectedOutputField.nextKeyView = test4InputField
-
         let defaultFontName = EditorWindowController.fontName()
         let defaultFontSize = EditorWindowController.fontSize()
         let font = NSFont(name: defaultFontName, size: defaultFontSize)
@@ -99,18 +68,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         bestGuessView.font = NSFont(name: defaultFontName, size: defaultFontSize)
 
         test1InputField.font = font
-        test2InputField.font = font
-        test3InputField.font = font
-        test4InputField.font = font
-        test5InputField.font = font
-        test6InputField.font = font
-
         test1ExpectedOutputField.font = font
-        test2ExpectedOutputField.font = font
-        test3ExpectedOutputField.font = font
-        test4ExpectedOutputField.font = font
-        test5ExpectedOutputField.font = font
-        test6ExpectedOutputField.font = font
 
         // from http://stackoverflow.com/questions/28001996/setting-minimum-width-of-nssplitviews
         self.definitionAndBestGuessSplitView.delegate = self
@@ -193,22 +151,10 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         return full_string
     }
 
-    private func makeAllTestsQueryString(definitionText: String, in1: String, in2: String = "", in3: String = "",
-                                         in4: String = "", in5: String = "", in6: String = "",
-                                         out1: String, out2: String = "", out3: String = "", out4: String = "",
-                                         out5: String = "", out6: String = "") -> String {
-        let allTestInputs = in1 + " "
-                + in2 + " "
-                + in3 + " "
-                + in4 + " "
-                + in5 + " "
-                + in6 + " "
-        let allTestOutputs = out1 + " "
-                + out2 + " "
-                + out3 + " "
-                + out4 + " "
-                + out5 + " "
-                + out6 + " "
+    private func makeAllTestsQueryString(definitionText: String, testInputs: [String], testOutputs: [String]) -> String {
+        let allTestInputs = testInputs.joined(separator: " ")
+        let allTestOutputs = testOutputs.joined(separator: " ")
+
 
         // get the path to the application's bundle, so we can load the query string files
         let bundle = Bundle.main
@@ -337,39 +283,18 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     func runCodeFromEditPane() {
         // Extract data from UI
         let processTest1 = !test1InputField.stringValue.isEmpty && !test1ExpectedOutputField.stringValue.isEmpty
-        let processTest2 = !test2InputField.stringValue.isEmpty && !test2ExpectedOutputField.stringValue.isEmpty
-        let processTest3 = !test3InputField.stringValue.isEmpty && !test3ExpectedOutputField.stringValue.isEmpty
-        let processTest4 = !test4InputField.stringValue.isEmpty && !test4ExpectedOutputField.stringValue.isEmpty
-        let processTest5 = !test5InputField.stringValue.isEmpty && !test5ExpectedOutputField.stringValue.isEmpty
-        let processTest6 = !test6InputField.stringValue.isEmpty && !test6ExpectedOutputField.stringValue.isEmpty
-
         let in1 = (processTest1 ? test1InputField.stringValue : "")
-        let in2 = (processTest2 ? test2InputField.stringValue : "")
-        let in3 = (processTest3 ? test3InputField.stringValue : "")
-        let in4 = (processTest4 ? test4InputField.stringValue : "")
-        let in5 = (processTest5 ? test5InputField.stringValue : "")
-        let in6 = (processTest6 ? test6InputField.stringValue : "")
-
         let out1 = (processTest1 ? test1ExpectedOutputField.stringValue : "")
-        let out2 = (processTest2 ? test2ExpectedOutputField.stringValue : "")
-        let out3 = (processTest3 ? test3ExpectedOutputField.stringValue : "")
-        let out4 = (processTest4 ? test4ExpectedOutputField.stringValue : "")
-        let out5 = (processTest5 ? test5ExpectedOutputField.stringValue : "")
-        let out6 = (processTest6 ? test6ExpectedOutputField.stringValue : "")
 
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
         runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, in1: in1, out1: out1)
 
-        resetTestUIs(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
-                out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
+        resetTestUIs(in1: in1, out1: out1)
     }
 
-    func resetTestUIs(in1: String, in2: String = "", in3: String = "",
-                      in4: String = "", in5: String = "", in6: String = "",
-                      out1: String, out2: String = "", out3: String = "", out4: String = "",
-                      out5: String = "", out6: String = "") {
+    func resetTestUIs(in1: String, out1: String) {
         func resetTestUI(_ statusLabel: NSTextField, inputField: NSTextField, outputField: NSTextField) {
             statusLabel.stringValue = ""
             inputField.textColor = EditorWindowController.defaultColor()
@@ -378,21 +303,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         if !shouldProcessTest(input: in1, output: out1) {
             resetTestUI(test1StatusLabel, inputField: test1InputField, outputField: test1ExpectedOutputField)
-        }
-        if !shouldProcessTest(input: in2, output: out2) {
-            resetTestUI(test2StatusLabel, inputField: test2InputField, outputField: test2ExpectedOutputField)
-        }
-        if !shouldProcessTest(input: in3, output: out3) {
-            resetTestUI(test3StatusLabel, inputField: test3InputField, outputField: test3ExpectedOutputField)
-        }
-        if !shouldProcessTest(input: in4, output: out4) {
-            resetTestUI(test4StatusLabel, inputField: test4InputField, outputField: test4ExpectedOutputField)
-        }
-        if !shouldProcessTest(input: in5, output: out5) {
-            resetTestUI(test5StatusLabel, inputField: test5InputField, outputField: test5ExpectedOutputField)
-        }
-        if !shouldProcessTest(input: in6, output: out6) {
-            resetTestUI(test6StatusLabel, inputField: test6InputField, outputField: test6ExpectedOutputField)
         }
     }
 
@@ -440,7 +350,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText,
-                in1: in1, out1: out1)
+                testInputs: [in1], testOutputs: [out1])
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
@@ -569,11 +479,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         // paths to the Schemes file containing the miniKanren query
-        let schemeScriptPathStringQuerySimpleForMondoScheme = pathQuerySimpleForMondoSchemeFile.path
-
-
         let schemeScriptPathStringNewSimple = pathNewSimple.path
-
         let schemeScriptPathStringNewTest1 = pathNewTest1.path
         let schemeScriptPathStringNewAlltests = pathNewAlltests.path
 

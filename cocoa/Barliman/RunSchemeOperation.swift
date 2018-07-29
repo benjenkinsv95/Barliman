@@ -57,11 +57,6 @@ class RunSchemeOperation: Operation {
             case "simple":   ewc.schemeDefinitionSpinner.startAnimation(self)
             case "allTests": ewc.bestGuessSpinner.startAnimation(self)
             case "test1":    ewc.test1Spinner.startAnimation(self)
-            case "test2":    ewc.test2Spinner.startAnimation(self)
-            case "test3":    ewc.test3Spinner.startAnimation(self)
-            case "test4":    ewc.test4Spinner.startAnimation(self)
-            case "test5":    ewc.test5Spinner.startAnimation(self)
-            case "test6":    ewc.test6Spinner.startAnimation(self)
             default: print("!!!!!!!!!! SWITCHERROR in startSpinner: unknown taskType: \( self.taskType )\n")
             }
         }
@@ -78,11 +73,6 @@ class RunSchemeOperation: Operation {
                 case "simple":   ewc.schemeDefinitionSpinner.stopAnimation(self)
                 case "allTests": ewc.bestGuessSpinner.stopAnimation(self)
                 case "test1":    ewc.test1Spinner.stopAnimation(self)
-                case "test2":    ewc.test2Spinner.stopAnimation(self)
-                case "test3":    ewc.test3Spinner.stopAnimation(self)
-                case "test4":    ewc.test4Spinner.stopAnimation(self)
-                case "test5":    ewc.test5Spinner.stopAnimation(self)
-                case "test6":    ewc.test6Spinner.stopAnimation(self)
                 default: print("!!!!!!!!!! SWITCHERROR in stopSpinner: unknown taskType: \( self.taskType )\n")
             }
         }
@@ -138,31 +128,6 @@ class RunSchemeOperation: Operation {
                 ewc.test1StatusLabel.stringValue = self.kThinkingString
                 ewc.test1InputField.textColor = self.kThinkingColor
                 ewc.test1ExpectedOutputField.textColor = self.kThinkingColor
-            case "test2":
-                ewc.test2StatusLabel.textColor = self.kThinkingColor
-                ewc.test2StatusLabel.stringValue = self.kThinkingString
-                ewc.test2InputField.textColor = self.kThinkingColor
-                ewc.test2ExpectedOutputField.textColor = self.kThinkingColor
-            case "test3":
-                ewc.test3StatusLabel.textColor = self.kThinkingColor
-                ewc.test3StatusLabel.stringValue = self.kThinkingString
-                ewc.test3InputField.textColor = self.kThinkingColor
-                ewc.test3ExpectedOutputField.textColor = self.kThinkingColor
-            case "test4":
-                ewc.test4StatusLabel.textColor = self.kThinkingColor
-                ewc.test4StatusLabel.stringValue = self.kThinkingString
-                ewc.test4InputField.textColor = self.kThinkingColor
-                ewc.test4ExpectedOutputField.textColor = self.kThinkingColor
-            case "test5":
-                ewc.test5StatusLabel.textColor = self.kThinkingColor
-                ewc.test5StatusLabel.stringValue = self.kThinkingString
-                ewc.test5InputField.textColor = self.kThinkingColor
-                ewc.test5ExpectedOutputField.textColor = self.kThinkingColor
-            case "test6":
-                ewc.test6StatusLabel.textColor = self.kThinkingColor
-                ewc.test6StatusLabel.stringValue = self.kThinkingString
-                ewc.test6InputField.textColor = self.kThinkingColor
-                ewc.test6ExpectedOutputField.textColor = self.kThinkingColor
             default: print("!!!!!!!!!! SWITCHERROR in thinkingColorAndLabel: unknown taskType: \( self.taskType )\n")
             }
         }
@@ -393,21 +358,6 @@ class RunSchemeOperation: Operation {
                 if taskType == "test1" {
                     onTestCompletion(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel, datastring: datastring)
                 }
-                if taskType == "test2" {
-                    onTestCompletion(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, label: ewc.test2StatusLabel,datastring: datastring)
-                }
-                if taskType == "test3" {
-                    onTestCompletion(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, label: ewc.test3StatusLabel,datastring: datastring)
-                }
-                if taskType == "test4" {
-                    onTestCompletion(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, label: ewc.test4StatusLabel,datastring: datastring)
-                }
-                if taskType == "test5" {
-                    onTestCompletion(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, label: ewc.test5StatusLabel,datastring: datastring)
-                }
-                if taskType == "test6" {
-                    onTestCompletion(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel,datastring: datastring)
-                }
                 if self.taskType == "allTests" {
                     if datastring == "fail" {
                         onBestGuessFailure(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
@@ -428,21 +378,6 @@ class RunSchemeOperation: Operation {
                 if taskType == "test1" {
                     onTestSuccess(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, label: ewc.test1StatusLabel)
                 }
-                if taskType == "test2" {
-                    onTestSuccess(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, label: ewc.test2StatusLabel)
-                }
-                if taskType == "test3" {
-                    onTestSuccess(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, label: ewc.test3StatusLabel)
-                }
-                if taskType == "test4" {
-                    onTestSuccess(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, label: ewc.test4StatusLabel)
-                }
-                if taskType == "test5" {
-                    onTestSuccess(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, label: ewc.test5StatusLabel)
-                }
-                if taskType == "test6" {
-                    onTestSuccess(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, label: ewc.test6StatusLabel)
-                }
 
 
             } else {
@@ -454,21 +389,6 @@ class RunSchemeOperation: Operation {
 
                 if taskType == "test1" {
                     onTestSyntaxError(ewc.test1InputField, outputField: ewc.test1ExpectedOutputField, spinner: ewc.test1Spinner, label: ewc.test1StatusLabel)
-                }
-                if taskType == "test2" {
-                    onTestSyntaxError(ewc.test2InputField, outputField: ewc.test2ExpectedOutputField, spinner: ewc.test2Spinner, label: ewc.test2StatusLabel)
-                }
-                if taskType == "test3" {
-                    onTestSyntaxError(ewc.test3InputField, outputField: ewc.test3ExpectedOutputField, spinner: ewc.test3Spinner, label: ewc.test3StatusLabel)
-                }
-                if taskType == "test4" {
-                    onTestSyntaxError(ewc.test4InputField, outputField: ewc.test4ExpectedOutputField, spinner: ewc.test4Spinner, label: ewc.test4StatusLabel)
-                }
-                if taskType == "test5" {
-                    onTestSyntaxError(ewc.test5InputField, outputField: ewc.test5ExpectedOutputField, spinner: ewc.test5Spinner, label: ewc.test5StatusLabel)
-                }
-                if taskType == "test6" {
-                    onTestSyntaxError(ewc.test6InputField, outputField: ewc.test6ExpectedOutputField, spinner: ewc.test6Spinner, label: ewc.test6StatusLabel)
                 }
                 if taskType == "allTests" {
                     onSyntaxErrorBestGuess(ewc.bestGuessView, label: ewc.bestGuessStatusLabel)
