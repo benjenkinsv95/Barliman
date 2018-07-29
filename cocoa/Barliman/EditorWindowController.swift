@@ -60,7 +60,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
     // keep track of the operation that runs all the tests together, in case we need to cancel it
     var schemeOperationAllTests: RunSchemeOperation?
 
-    let processingQueue: OperationQueue = OperationQueue()
+    let runSchemeOperationQueue: OperationQueue = OperationQueue()
 
     static func fontName() -> String {
         return "Monaco"
@@ -135,16 +135,16 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         runCodeFromEditPaneTimer?.invalidate()
 
         // tell every operation to kill its Scheme task
-        print("prior operation count: \(processingQueue.operationCount)")
-        processingQueue.cancelAllOperations()
+        print("prior operation count: \(runSchemeOperationQueue.operationCount)")
+        runSchemeOperationQueue.cancelAllOperations()
 
         //
 
         // wait until all the operations have finished
-        processingQueue.waitUntilAllOperationsAreFinished()
-        print("subsequent operation count: \(processingQueue.operationCount)")
+        runSchemeOperationQueue.waitUntilAllOperationsAreFinished()
+        print("subsequent operation count: \(runSchemeOperationQueue.operationCount)")
 
-        if processingQueue.operationCount > 0 {
+        if runSchemeOperationQueue.operationCount > 0 {
             // handle this better!  :)
             print("$$$$  Oh noes!  Looks like there is a Scheme process still running!")
         }
@@ -360,8 +360,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let definitionText = (schemeDefinitionView.textStorage as NSAttributedString!).string
         let interpreterSemantics: String = semanticsWindowController!.getInterpreterCode()
 
-        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
-                out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
+        runCode(definitionText: definitionText, interpreterSemantics:interpreterSemantics, in1: in1, out1: out1)
 
         resetTestUIs(in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6, out1: out1,
                 out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
@@ -397,24 +396,13 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         }
     }
 
-    func runCode(definitionText: String, interpreterSemantics: String, in1: String, in2: String = "", in3: String = "",
-               in4: String = "", in5: String = "", in6: String = "",
-               out1: String, out2: String = "", out3: String = "", out4: String = "",
-               out5: String = "", out6: String = "") {
-
-
+    func runCode(definitionText: String, interpreterSemantics: String, in1: String, out1: String) {
         // see how many operations are currently in the queue
-        print("operation count: \(processingQueue.operationCount)")
+        print("operation count: \(runSchemeOperationQueue.operationCount)")
+        runSchemeOperationQueue.cancelAllOperations()
 
-        // send a signal to cancel the running Scheme task, to every operation in the processing queue
-        //
-        // it is the responsibility of the operations to check for the cancel signal
-        processingQueue.cancelAllOperations()
 
-        // get the path to the application's bundle, so we can load the miniKanren and interpreter files
-        // into Chez
         let bundle = Bundle.main
-
         let mk_vicare_path: NSString? = bundle.path(forResource: "mk-vicare", ofType: "scm", inDirectory: "mk-and-rel-interp/mk") as NSString?
         let mk_path: NSString? = bundle.path(forResource: "mk", ofType: "scm", inDirectory: "mk-and-rel-interp/mk") as NSString?
 
@@ -425,20 +413,10 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         // files that load query code
         let new_query_file_simple = "barliman-new-query-simple.scm"
         let new_query_file_test1 = "barliman-new-query-test1.scm"
-        let new_query_file_test2 = "barliman-new-query-test2.scm"
-        let new_query_file_test3 = "barliman-new-query-test3.scm"
-        let new_query_file_test4 = "barliman-new-query-test4.scm"
-        let new_query_file_test5 = "barliman-new-query-test5.scm"
-        let new_query_file_test6 = "barliman-new-query-test6.scm"
         let new_query_file_alltests = "barliman-new-query-alltests.scm"
 
         // files containing the actual query code
         let new_query_file_actual_test1 = "barliman-new-query-actual-test1.scm"
-        let new_query_file_actual_test2 = "barliman-new-query-actual-test2.scm"
-        let new_query_file_actual_test3 = "barliman-new-query-actual-test3.scm"
-        let new_query_file_actual_test4 = "barliman-new-query-actual-test4.scm"
-        let new_query_file_actual_test5 = "barliman-new-query-actual-test5.scm"
-        let new_query_file_actual_test6 = "barliman-new-query-actual-test6.scm"
         let new_query_file_actual_alltests = "barliman-new-query-actual-alltests.scm"
 
         let mk_vicare_path_string = mk_vicare_path! as String
@@ -455,44 +433,14 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let newTest1ActualQueryString: String = makeQueryString(definitionText,
-                body: test1InputField.stringValue,
-                expectedOut: test1ExpectedOutputField.stringValue,
+                body: in1,
+                expectedOut: out1,
                 simple: false,
                 name: "-test1")
 
-        let newTest2ActualQueryString: String = makeQueryString(definitionText,
-                body: test2InputField.stringValue,
-                expectedOut: test2ExpectedOutputField.stringValue,
-                simple: false,
-                name: "-test2")
 
-        let newTest3ActualQueryString: String = makeQueryString(definitionText,
-                body: test3InputField.stringValue,
-                expectedOut: test3ExpectedOutputField.stringValue,
-                simple: false,
-                name: "-test3")
-
-        let newTest4ActualQueryString: String = makeQueryString(definitionText,
-                body: test4InputField.stringValue,
-                expectedOut: test4ExpectedOutputField.stringValue,
-                simple: false,
-                name: "-test4")
-
-        let newTest5ActualQueryString: String = makeQueryString(definitionText,
-                body: test5InputField.stringValue,
-                expectedOut: test5ExpectedOutputField.stringValue,
-                simple: false,
-                name: "-test5")
-
-        let newTest6ActualQueryString: String = makeQueryString(definitionText,
-                body: test6InputField.stringValue,
-                expectedOut: test6ExpectedOutputField.stringValue,
-                simple: false,
-                name: "-test6")
-
-
-        let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText, in1: in1, in2: in2, in3: in3, in4: in4, in5: in5, in6: in6,
-                out1: out1, out2: out2, out3: out3, out4: out4, out5: out5, out6: out6)
+        let newAlltestsActualQueryString = makeAllTestsQueryString(definitionText: definitionText,
+                in1: in1, out1: out1)
 
 
         // adapted from http://stackoverflow.com/questions/26573332/reading-a-short-text-file-to-a-string-in-swift
@@ -533,11 +481,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
         let newSimpleQueryString: String
         let newTest1QueryString: String
-        let newTest2QueryString: String
-        let newTest3QueryString: String
-        let newTest4QueryString: String
-        let newTest5QueryString: String
-        let newTest6QueryString: String
         let newAlltestsQueryString: String
 
 
@@ -548,21 +491,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
             let fullNewQueryActualTest1FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test1.scm")
             let localNewQueryActualTest1FilePath = fullNewQueryActualTest1FilePath.path
-
-            let fullNewQueryActualTest2FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test2.scm")
-            let localNewQueryActualTest2FilePath = fullNewQueryActualTest2FilePath.path
-
-            let fullNewQueryActualTest3FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test3.scm")
-            let localNewQueryActualTest3FilePath = fullNewQueryActualTest3FilePath.path
-
-            let fullNewQueryActualTest4FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test4.scm")
-            let localNewQueryActualTest4FilePath = fullNewQueryActualTest4FilePath.path
-
-            let fullNewQueryActualTest5FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test5.scm")
-            let localNewQueryActualTest5FilePath = fullNewQueryActualTest5FilePath.path
-
-            let fullNewQueryActualTest6FilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-test6.scm")
-            let localNewQueryActualTest6FilePath = fullNewQueryActualTest6FilePath.path
 
             let fullNewQueryActualAlltestsFilePath = URL(fileURLWithPath: dir).appendingPathComponent("barliman-new-query-actual-alltests.scm")
             let localNewQueryActualAlltestsFilePath = fullNewQueryActualAlltestsFilePath.path
@@ -587,22 +515,11 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             }
 
             newTest1QueryString = makeNewTestNQueryString(1, actualQueryFilePath: localNewQueryActualTest1FilePath)
-            newTest2QueryString = makeNewTestNQueryString(2, actualQueryFilePath: localNewQueryActualTest2FilePath)
-            newTest3QueryString = makeNewTestNQueryString(3, actualQueryFilePath: localNewQueryActualTest3FilePath)
-            newTest4QueryString = makeNewTestNQueryString(4, actualQueryFilePath: localNewQueryActualTest4FilePath)
-            newTest5QueryString = makeNewTestNQueryString(5, actualQueryFilePath: localNewQueryActualTest5FilePath)
-            newTest6QueryString = makeNewTestNQueryString(6, actualQueryFilePath: localNewQueryActualTest6FilePath)
-
         } else {
             print("!!!!!  LOAD_ERROR -- can't find Document directory\n")
 
             newSimpleQueryString = ""
             newTest1QueryString = ""
-            newTest2QueryString = ""
-            newTest3QueryString = ""
-            newTest4QueryString = ""
-            newTest5QueryString = ""
-            newTest6QueryString = ""
             newAlltestsQueryString = ""
         }
 
@@ -611,19 +528,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         var pathNewSimple: URL!
 
         var pathNewTest1: URL!
-        var pathNewTest2: URL!
-        var pathNewTest3: URL!
-        var pathNewTest4: URL!
-        var pathNewTest5: URL!
-        var pathNewTest6: URL!
         var pathNewAlltests: URL!
 
         var pathNewActualTest1: URL!
-        var pathNewActualTest2: URL!
-        var pathNewActualTest3: URL!
-        var pathNewActualTest4: URL!
-        var pathNewActualTest5: URL!
-        var pathNewActualTest6: URL!
         var pathNewActualAlltests: URL!
 
 
@@ -636,19 +543,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
             pathNewSimple = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_simple)
 
             pathNewTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test1)
-            pathNewTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test2)
-            pathNewTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test3)
-            pathNewTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test4)
-            pathNewTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test5)
-            pathNewTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_test6)
             pathNewAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_alltests)
 
             pathNewActualTest1 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test1)
-            pathNewActualTest2 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test2)
-            pathNewActualTest3 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test3)
-            pathNewActualTest4 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test4)
-            pathNewActualTest5 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test5)
-            pathNewActualTest6 = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_test6)
             pathNewActualAlltests = URL(fileURLWithPath: dir).appendingPathComponent(new_query_file_actual_alltests)
 
             // write the query files
@@ -660,19 +557,9 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
                 try newSimpleQueryString.write(to: pathNewSimple, atomically: false, encoding: String.Encoding.utf8)
 
                 try newTest1QueryString.write(to: pathNewTest1, atomically: false, encoding: String.Encoding.utf8)
-                try newTest2QueryString.write(to: pathNewTest2, atomically: false, encoding: String.Encoding.utf8)
-                try newTest3QueryString.write(to: pathNewTest3, atomically: false, encoding: String.Encoding.utf8)
-                try newTest4QueryString.write(to: pathNewTest4, atomically: false, encoding: String.Encoding.utf8)
-                try newTest5QueryString.write(to: pathNewTest5, atomically: false, encoding: String.Encoding.utf8)
-                try newTest6QueryString.write(to: pathNewTest6, atomically: false, encoding: String.Encoding.utf8)
                 try newAlltestsQueryString.write(to: pathNewAlltests, atomically: false, encoding: String.Encoding.utf8)
 
                 try newTest1ActualQueryString.write(to: pathNewActualTest1, atomically: false, encoding: String.Encoding.utf8)
-                try newTest2ActualQueryString.write(to: pathNewActualTest2, atomically: false, encoding: String.Encoding.utf8)
-                try newTest3ActualQueryString.write(to: pathNewActualTest3, atomically: false, encoding: String.Encoding.utf8)
-                try newTest4ActualQueryString.write(to: pathNewActualTest4, atomically: false, encoding: String.Encoding.utf8)
-                try newTest5ActualQueryString.write(to: pathNewActualTest5, atomically: false, encoding: String.Encoding.utf8)
-                try newTest6ActualQueryString.write(to: pathNewActualTest6, atomically: false, encoding: String.Encoding.utf8)
                 try newAlltestsActualQueryString.write(to: pathNewActualAlltests, atomically: false, encoding: String.Encoding.utf8)
             } catch {
                 // this error handling could be better!  :)
@@ -688,11 +575,6 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         let schemeScriptPathStringNewSimple = pathNewSimple.path
 
         let schemeScriptPathStringNewTest1 = pathNewTest1.path
-        let schemeScriptPathStringNewTest2 = pathNewTest2.path
-        let schemeScriptPathStringNewTest3 = pathNewTest3.path
-        let schemeScriptPathStringNewTest4 = pathNewTest4.path
-        let schemeScriptPathStringNewTest5 = pathNewTest5.path
-        let schemeScriptPathStringNewTest6 = pathNewTest6.path
         let schemeScriptPathStringNewAlltests = pathNewAlltests.path
 
 
@@ -700,19 +582,7 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
 
 
         let runSchemeOpSimple = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewSimple, taskType: "simple")
-
         let runSchemeOpTest1 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest1, taskType: "test1")
-
-        let runSchemeOpTest2 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest2, taskType: "test2")
-
-        let runSchemeOpTest3 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest3, taskType: "test3")
-
-        let runSchemeOpTest4 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest4, taskType: "test4")
-
-        let runSchemeOpTest5 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest5, taskType: "test5")
-
-        let runSchemeOpTest6 = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewTest6, taskType: "test6")
-
         let runSchemeOpAllTests = RunSchemeOperation(editorWindowController: self, schemeScriptPathString: schemeScriptPathStringNewAlltests, taskType: "allTests")
 
 
@@ -723,37 +593,17 @@ class EditorWindowController: NSWindowController, NSSplitViewDelegate {
         //
         // This operation seems expensive.  Barliman seems to work okay without this call.  Need we worry about a race condition here?
         //
-        processingQueue.waitUntilAllOperationsAreFinished()
+        runSchemeOperationQueue.waitUntilAllOperationsAreFinished()
 
 
         // now that the previous operations have completed, safe to add the new operations
-        processingQueue.addOperation(runSchemeOpAllTests)
+        runSchemeOperationQueue.addOperation(runSchemeOpAllTests)
 
-        processingQueue.addOperation(runSchemeOpSimple)
+        runSchemeOperationQueue.addOperation(runSchemeOpSimple)
 
         if shouldProcessTest(input: in1, output: out1) {
             print("queuing test1")
-            processingQueue.addOperation(runSchemeOpTest1)
-        }
-        if shouldProcessTest(input: in2, output: out2) {
-            print("queuing test2")
-            processingQueue.addOperation(runSchemeOpTest2)
-        }
-        if shouldProcessTest(input: in3, output: out3) {
-            print("queuing test3")
-            processingQueue.addOperation(runSchemeOpTest3)
-        }
-        if shouldProcessTest(input: in4, output: out4) {
-            print("queuing test4")
-            processingQueue.addOperation(runSchemeOpTest4)
-        }
-        if shouldProcessTest(input: in5, output: out5) {
-            print("queuing test5")
-            processingQueue.addOperation(runSchemeOpTest5)
-        }
-        if shouldProcessTest(input: in6, output: out6) {
-            print("queuing test6")
-            processingQueue.addOperation(runSchemeOpTest6)
+            runSchemeOperationQueue.addOperation(runSchemeOpTest1)
         }
     }
 

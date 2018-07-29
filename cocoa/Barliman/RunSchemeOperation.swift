@@ -322,7 +322,7 @@ class RunSchemeOperation: Operation {
                     label.stringValue = String(format: "Succeeded (%.2f s)",  timeInterval)
 
                     // Be polite and cancel all the other tests, since they must succeed!
-                    self.editorWindowController.processingQueue.cancelAllOperations()
+                    self.editorWindowController.runSchemeOperationQueue.cancelAllOperations()
                 }
             }
 
@@ -337,7 +337,7 @@ class RunSchemeOperation: Operation {
                 label.stringValue = String(format: "Failed (%.2f s)",  timeInterval)
 
                 // Be polite and cancel all the other tests, since they must succeed!
-                self.editorWindowController.processingQueue.cancelAllOperations()
+                self.editorWindowController.runSchemeOperationQueue.cancelAllOperations()
             }
 
             func onBestGuessKilled(_ bestGuessView: NSTextView, label: NSTextField) {
